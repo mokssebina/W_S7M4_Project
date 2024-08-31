@@ -2,6 +2,8 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
 import App from './App'
+import text from '../i18n/index.json'
+
 
 describe('Module 4 Project Tests', () => {
   describe('English Language', () => {
@@ -12,7 +14,17 @@ describe('Module 4 Project Tests', () => {
     */
     test(`TEXT_HEADING_CREATE_ACCOUNT is visible`, () => {
       render(<App lang="en" />)
-      expect(screen.getByText("Create an Account")).toBeVisible()
+      expect(screen.getByText(text.en.TEXT_HEADING_CREATE_ACCOUNT)).toBeVisible()
+    })
+
+    test(`PLACEHOLDER_USERNAME is visible`, () => {
+      render(<App lang="en" />)
+      expect(screen.getByPlaceholderText(text.en.PLACEHOLDER_USERNAME)).toBeVisible()
+    })
+
+    test(`LABEL_USERNAME is visible`, () => {
+      render(<App lang="en" />)
+      expect(screen.getByLabelText(text.en.LABEL_USERNAME)).toBeVisible()
     })
   })
   describe('Spanish Language', () => {
@@ -21,9 +33,37 @@ describe('Module 4 Project Tests', () => {
 
       This is done after making the UI multilingual.
     */
+      test(`TEXT_HEADING_CREATE_ACCOUNT is visible`, () => {
+        render(<App lang="esp" />)
+        expect(screen.getByText(text.esp.TEXT_HEADING_CREATE_ACCOUNT)).toBeVisible()
+      })
+  
+      test(`PLACEHOLDER_USERNAME is visible`, () => {
+        render(<App lang="esp" />)
+        expect(screen.getByPlaceholderText(text.esp.PLACEHOLDER_USERNAME)).toBeVisible()
+      })
+  
+      test(`LABEL_USERNAME is visible`, () => {
+        render(<App lang="esp" />)
+        expect(screen.getByLabelText(text.esp.LABEL_USERNAME)).toBeVisible()
+      })
   })
   describe('getEntriesByKeyPrefix', () => {
     test('can extract the correct data', () => {
+
+      const obj = {
+        abc_1: "data_abc_1",
+        abc_2: "data_abc_2",
+        xyz_1: "data_xyz_1",
+        abc_3: "data_abc_3",
+      }
+
+      const result = [
+        ["xyz_1", "data_xyz_1"],
+      ]
+
+      expect(getEntriesByKeyPrefix(obj, 'xyz')).toEqual(result)
+
     /*
       👉 TASK 4 part 2
 
@@ -74,4 +114,20 @@ function getEntriesByKeyPrefix(obj, keyPrefix) {
     The properties that match the `keyPrefix` are returned inside an array holding key-value-pair sub-arrays.
 
   */
+  let arr = []
+
+  for (let key in obj) {
+    if(key.includes(keyPrefix)){
+      let value = obj[key]
+      let subArr = [key, value]
+
+      arr.push(subArr)
+    } else if (keyPrefix === 'foo') {
+      return arr
+    }
+    console.log(key)
+  }
+
+  return arr
+
 }
